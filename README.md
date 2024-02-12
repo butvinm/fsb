@@ -37,3 +37,6 @@ For more details refer to source code.
 
 It's single 100 LOC class - just copy-paste it to your project.
 
+```bash
+curl https://raw.githubusercontent.com/butvinm/fsb/master/src/main/java/butvinm/fsb/FancyStringBuilder.java -O
+```
