@@ -30,6 +30,14 @@ fsb.eb().l("}");
 return fsb.toString();
 ```
 
+or short inline version:
+```java
+import static butvinm.fsb.FancyStringBuilder.fsb;
+
+...
+System.out.println(fsb().l("Hello, %s!", username));
+```
+
 For more details refer to source code.
 
 
