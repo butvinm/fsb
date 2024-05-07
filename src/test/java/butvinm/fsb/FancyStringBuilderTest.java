@@ -14,6 +14,13 @@ public class FancyStringBuilderTest {
     }
 
     @Test
+    public void testConstructors() {
+        var fsb0 = new FancyStringBuilder();
+        var fsb1 = new FancyStringBuilder(new StringBuilder());
+        var fsb2 = FancyStringBuilder.fsb();
+        var fsb3 = FancyStringBuilder.fsb(new StringBuilder());
+    }
+    @Test
     public void testAppendObject() {
         assertNotNull(fsb.a(123));
         assertEquals("123", fsb.toString());

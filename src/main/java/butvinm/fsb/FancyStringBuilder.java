@@ -27,9 +27,44 @@ package butvinm.fsb;
  * Opinionated StringBuilder wrapper.
  */
 public class FancyStringBuilder {
-    private StringBuilder sb = new StringBuilder();
+    private final StringBuilder sb;
 
     private Integer indent = 0;
+
+    /**
+     * Constructor with default base StringBuilder.
+     */
+    public FancyStringBuilder() {
+        this.sb = new StringBuilder();
+    }
+
+    /**
+     * Constrcutor with custom base StringBuilder.
+     *
+     * @param sb - Custom StringBuilder that would be used internally.
+     */
+    public FancyStringBuilder(StringBuilder sb) {
+        this.sb = sb;
+    }
+
+    /**
+     * Static constructor.
+     *
+     * @return FSB instnace.
+     */
+    public static FancyStringBuilder fsb() {
+        return new FancyStringBuilder();
+    }
+
+    /**
+     * Static constructor with custom StringBuilder.
+     *
+     * @param sb - Custom StringBuilder that would be used internally.
+     * @return FSB instnace.
+     */
+    public static FancyStringBuilder fsb(StringBuilder sb) {
+        return new FancyStringBuilder(sb);
+    }
 
     /**
      * Append object string repr to content.
