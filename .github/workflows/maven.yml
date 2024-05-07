@@ -36,11 +36,10 @@ jobs:
             - name: Run PITest
               run: |
                   mvn test-compile org.pitest:pitest-maven:mutationCoverage -DoutputFormats=CSV,HTML
-                  { echo    '| File | Package | Mutation | Function | Line | Status | Test |'; \
-                    echo -n '| ---- | ------- | -------- | -------- | ---- | ------ | ---- |'; \
-                    cat target/pit-reports/mutations.csv; \
+                  { echo '| File | Package | Mutation | Function | Line | Status | Test |'; \
+                    echo '| ---- | ------- | -------- | -------- | ---- | ------ | ---- |'; \
+                    cat target/pit-reports/mutations.csv | grep "SURVIVED" | awk -F, '{print "| " $1 " | " $2 " | " $3 " | " $4 " | " $5 " | " $6 " | " $7 " |"}';
                   } > target/pit-reports/mutations.md
-                  sed -i 's/,/|/g' target/pit-reports/mutations.md
 
             - name: Archive PITest report
               uses: actions/upload-artifact@v4
