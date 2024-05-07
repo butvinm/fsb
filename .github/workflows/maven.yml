@@ -43,7 +43,10 @@ jobs:
               run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
 
             - name: Archive PITest report
-              uses: actions/upload-artifact@v4
+              uses: gavv/pull-request-artifacts@v2
               with:
-                name: pitest-report
-                path: target/pit-reports
+                  commit: ${{ github.event.pull_request.head.sha }}
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  comment-title: "PITest Report"
+                  artifacts: |
+                    target/pit-reports
