@@ -15,55 +15,56 @@ public class FancyStringBuilderTest {
 
     @Test
     public void testAppendObject() {
-        fsb.a(123);
+        assertNotNull(fsb.a(123));
         assertEquals("123", fsb.toString());
     }
 
     @Test
     public void testAppendStringWithFormatting() {
-        fsb.a("Value: %d", 123);
+        assertNotNull(fsb.a("Value: %d", 123));
         assertEquals("Value: 123", fsb.toString());
     }
 
     @Test
     public void testAppendObjectWithLineBreak() {
-        fsb.l(123);
+        assertNotNull(fsb.l(123));
         assertEquals("123\n", fsb.toString());
     }
 
     @Test
     public void testAppendFormattedStringWithLineBreak() {
-        fsb.l("Value: %d", 123);
+        assertNotNull(fsb.l("Value: %d", 123));
         assertEquals("Value: 123\n", fsb.toString());
     }
 
     @Test
     public void testAppendSpace() {
-        fsb.s();
+        assertNotNull(fsb.s());
         assertEquals(" ", fsb.toString());
     }
 
     @Test
     public void testAppendLineBreak() {
-        fsb.n();
+        assertNotNull(fsb.n());
         assertEquals("\n", fsb.toString());
     }
 
     @Test
     public void testAppendTabulation() {
-        fsb.t();
+        assertNotNull(fsb.t());
         assertEquals("\t", fsb.toString());
     }
 
     @Test
     public void testIndentation() {
-        fsb
-            .bb()
-                .l("Indented")
-                .a("Indented").s().a("Same line")
-            .eb()
-            .a("Not indented");
-
+        assertNotNull(
+            fsb
+                .bb()
+                    .l("Indented")
+                    .a("Indented").s().a("Same line")
+                .eb()
+                .a("Not indented")
+        );
         assertEquals(
             "\tIndented\n\tIndented Same lineNot indented",
             fsb.toString()
@@ -79,18 +80,19 @@ public class FancyStringBuilderTest {
             ".\n" +
             ":3\n";
 
-        fsb
-            .l("You can make classes,").s()
-            .a("but %s %s", "you can only", "ever make").s()
-            .a("one instance of them.")
-            .n()
-            .bb()
-            .t()
-            .a("This shouldn't affect how most object-oriented programmers work")
-            .eb()
-            .a(".").n()
-            .l(":3");
-
+        assertNotNull(
+            fsb
+                .l("You can make classes,").s()
+                .a("but %s %s", "you can only", "ever make").s()
+                .a("one instance of them.")
+                .n()
+                .bb()
+                    .t()
+                    .a("This shouldn't affect how most object-oriented programmers work")
+                .eb()
+                .a(".").n()
+                .l(":3")
+        );
         assertEquals(expected, fsb.toString());
     }
 
