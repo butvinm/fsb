@@ -47,10 +47,3 @@ jobs:
               with:
                 name: pitest-report
                 path: target/pit-reports
-
-            - name: Add PITest report to PR
-              uses: mshick/add-pr-comment@v2
-              with:
-                message: |
-                    # PITest report
-                    ![pitest-report](${{ steps.artifact-upload-step.outputs.pitest-report }})
