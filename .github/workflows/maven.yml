@@ -17,9 +17,6 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
-            pull-requests: write
 
         steps:
             - uses: actions/checkout@v4
@@ -46,10 +43,14 @@ jobs:
               run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
 
             - name: Archive PITest report
-              uses: gavv/pull-request-artifacts@v2
+              uses: actions/upload-artifact@v4
               with:
-                  commit: ${{ github.event.pull_request.head.sha }}
-                  repo-token: ${{ secrets.GITHUB_TOKEN }}
-                  comment-title: "PITest Report"
-                  artifacts: |
-                    target/pit-reports
+                name: pitest-report
+                path: target/pit-reports
+
+            - name: Add PITest report to PR
+              uses: mshick/add-pr-comment@v2
+              with:
+                message: |
+                    # PITest report
+                    ![pitest-report](${{ steps.artifact-upload-step.outputs.pitest-report }})
