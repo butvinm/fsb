@@ -1,0 +1,127 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'info.solidsoft.pitest' version '1.9.11'
+}
+
+group = 'butvinm.fsb'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.pitest:pitest-junit5-plugin:1.2.1'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+pitest { }
+
+test {
+    useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+    }
+}
+
+task snakeGame {
+    def width = 40
+    def height = 40
+    def snake = [[3, 3], [3, 4], [3, 5]]
+    def direction = 'd'
+    def fruit = [5, 5]
+
+    def clearScreen = {
+        // ANSI escape code to clear the screen
+        print("\u001b[H\u001b[2J")
+    }
+
+    def moveSnake = {
+        def head = snake[-1]
+
+        switch (direction) {
+            case 'w': if (direction != 's') head = [head[0], head[1] - 1]; break
+            case 's': if (direction != 'w') head = [head[0], head[1] + 1]; break
+            case 'a': if (direction != 'd') head = [head[0] - 1, head[1]]; break
+            case 'd': if (direction != 'a') head = [head[0] + 1, head[1]]; break
+        }
+
+        if (head[0] < 0 || head[0] >= width || head[1] < 0 || head[1] >= height) {
+            println "IndexOutOfBoundsException! Your score: ${snake.size()}"
+            System.exit(0)
+        }
+
+        if (head == fruit) {
+            fruit = [new Random().nextInt(width), new Random().nextInt(height)]
+        } else {
+            snake.remove(0)
+        }
+
+        if (snake.contains(head)) {
+            println "CircularDependency! Your score: ${snake.size()}"
+            System.exit(0)
+        }
+
+        snake << head
+    }
+
+    def printBoard = {
+        clearScreen()
+        def board = []
+        for (int y = 0; y < height; y++) {
+            def row = []
+            for (int x = 0; x < width; x++) {
+                if (snake.contains([x, y])) {
+                    row << '#'
+                } else if ([x, y] == fruit) {
+                    row << '*'
+                } else {
+                    row << ' '
+                }
+            }
+            board << row.join(' ')
+        }
+        println board.join('\n')
+    }
+
+    def readInputFile = {
+        Thread.startDaemon {
+            def inputFilePath = 'input.txt'
+            def inputFile = new File(inputFilePath)
+            while (true) {
+                if (inputFile.exists()) {
+                    def input = inputFile.text.trim()
+                    if (!input.isEmpty()) {
+                        direction = input[-1]
+                    }
+                }
+            }
+        }
+    }
+
+    doLast {
+        readInputFile()
+        while (true) {
+            printBoard()
+            moveSnake()
+            sleep(500)
+        }
+    }
+}
